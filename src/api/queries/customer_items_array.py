@@ -10,7 +10,7 @@ QUERY = """
         FROM `ing-datos-avanzado.main_data.orders` AS o,
         UNNEST(o.order_items) AS i
         WHERE
-        o.customer_id = 7
+        o.customer_id = {0}
     ),
 
     all_combinations AS (
@@ -18,7 +18,7 @@ QUERY = """
             c.customer_id,
             i.item_id
         FROM
-            (SELECT customer_id FROM `ing-datos-avanzado.main_data.customer` WHERE customer_id = 7) AS c
+            (SELECT customer_id FROM `ing-datos-avanzado.main_data.customer` WHERE customer_id = {0}) AS c
         CROSS JOIN
             (SELECT item_id FROM `ing-datos-avanzado.main_data.item`) AS i
     ),
@@ -41,8 +41,6 @@ QUERY = """
     )
 
     SELECT
-        customer_id,
-        item_id,
         COUNT(interaction) AS interaction
     FROM
         customer_product_interactions
