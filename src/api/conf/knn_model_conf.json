@@ -1,3 +1,4 @@
 {
-    "model_pkl_path" : ""
+    "model_pkl_path" : "src/knn/knn_model.pkl",
+    "similar_customers_number": 3
 }
