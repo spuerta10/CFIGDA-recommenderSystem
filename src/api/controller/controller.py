@@ -10,7 +10,7 @@ from flask import (
 
 
 controller_bp = Blueprint("controller", __name__)
-knn_model = KNNModel(r"src\api\conf\knn_model_conf.json")
+knn_model = KNNModel(r"src/api/conf/knn_model_conf.json")
 
 @controller_bp.route("/items/recommend", methods=["POST"])
 def recommend_items() -> Response:
