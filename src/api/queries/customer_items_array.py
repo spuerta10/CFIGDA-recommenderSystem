@@ -47,4 +47,4 @@ QUERY = """
     GROUP BY
         customer_id,
         item_id
-""" 
+"""
