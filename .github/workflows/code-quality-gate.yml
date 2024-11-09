@@ -32,7 +32,6 @@ jobs:
       - name: Run pylint
         run: |
           pylint src/
-        continue-on-error: true 
   
   test:
     runs-on: ubuntu-latest
