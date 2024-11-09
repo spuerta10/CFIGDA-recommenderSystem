@@ -31,7 +31,7 @@ jobs:
       
       - name: Run pylint
         run: |
-          pylint src/
+          pylint --jobs=2 src/
   
   test:
     runs-on: ubuntu-latest
