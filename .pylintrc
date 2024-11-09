@@ -1,2 +1,5 @@
+[MASTER]
+fail-under = 7
+
 [MESSAGES CONTROL]
 disable=import-error
