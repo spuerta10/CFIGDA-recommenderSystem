@@ -1,14 +1,15 @@
 import os
 
-from api.controller.controller import controller_bp
-
 from flask import Flask
+
+from api.controller.controller import controller_bp
 
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.register_blueprint(controller_bp)
     return app
+
 
 app = create_app()
 
