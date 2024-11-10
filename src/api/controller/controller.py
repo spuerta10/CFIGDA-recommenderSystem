@@ -4,6 +4,7 @@ purchase history. Uses KNN modeling to analyze and suggest items for users.
 """
 
 from flask import Blueprint, Response, request, jsonify
+from flask_wtf.csrf import generate_csrf
 
 from api.knn_model import KNNModel
 from api.controller.request_parser import RequestParser
@@ -11,6 +12,21 @@ from api.controller.request_parser import RequestParser
 
 controller_bp = Blueprint("controller", __name__)
 knn_model = KNNModel(r"src/api/conf/knn_model_conf.json")
+
+
+@controller_bp.route("/get-csrf-token", methods=["GET"])
+def get_csrf_token():
+    """
+    Generates a CSRF token and returns it as part of a JSON response.
+
+    Returns:
+        Response: A Flask response containing the CSRF token in JSON format.
+        The CSRF token is also set as a cookie in the response.
+    """
+    csrf_token = generate_csrf()
+    response = jsonify({"csrf_token": csrf_token})
+    response.set_cookie("csrf_token", csrf_token, httponly=True, secure=True, samesite="Lax")
+    return response
 
 
 @controller_bp.route("/items/recommend", methods=["POST"])

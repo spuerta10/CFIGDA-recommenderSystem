@@ -1,13 +1,22 @@
 import os
+from secrets import token_hex
 
 from flask import Flask
 
+from api.flask_app_builder import FlaskAppBuilder
 from api.controller.controller import controller_bp
 
 
 def create_app() -> Flask:
-    app = Flask(__name__)
-    app.register_blueprint(controller_bp)
+    config = {
+        "SECRET_KEY": os.environ.get("SECRET_KEY", f"{token_hex(32)}"),
+        "WTF_CSRF_ENABLED": True  
+    }
+    app = FlaskAppBuilder() \
+        .with_config(config) \
+        .with_blueprints(controller_bp) \
+        .with_csrf_protection() \
+        .build()
     return app
 
 
