@@ -10,50 +10,23 @@ on:
 
 env:
   PYTHON_VERSION: 3.11
-  LINT_SCORE_THRESHOLD: 70 # Pylint score threshold 
 
 jobs:
-  static-analysis:
+  code-quality-analysis:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      
-      - name: Set up python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pylint
-      
-      - name: Run pylint
-        run: |
-          pylint src/
-  
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-      
-      - name: Auth with GCP
-        uses: google-github-actions/auth@v0.4.0
-        with:
-          credentials_json: ${{ secrets.SA_RECOMMENDER_SYSTEM }}
 
       - name: Set up python
         uses: actions/setup-python@v4
-        with:
+        with: 
           python-version: ${{ env.PYTHON_VERSION }}
       
-      - name: Install dependencies
+      - name: Install tox
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install tox
       
-      - name: Run tests
-        run: |
-          pytest
+      - name: Run tox
+        run: tox -p
