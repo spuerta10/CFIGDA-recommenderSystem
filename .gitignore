@@ -2,3 +2,7 @@ venv/
 __pycache__/
 sa-recommender-system.json
 .pytest_cache/
+.coverage
+coverage.xml
+.scannerwork
+.tox
