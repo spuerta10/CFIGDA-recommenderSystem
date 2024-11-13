@@ -18,6 +18,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v0.4.0
+        with:
+          credentials_json: ${{ secrets.SA_RECOMMENDER_SYSTEM }}
+
       - name: Set up python
         uses: actions/setup-python@v4
         with: 
