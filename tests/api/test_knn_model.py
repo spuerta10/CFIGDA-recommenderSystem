@@ -98,6 +98,52 @@ def test_query_recommended_items(mock_bq_client: MagicMock, mock_knn_model: KNNM
     )
     assert isinstance(result, list)
     
+    
+def test_recommend_valid_case(mock_knn_model: KNNModel):
+    mock_knn_model\
+        ._query_customer_items_matrix = MagicMock(
+            return_value = array([[1, 0, 1, 0, 1]])
+        )
+    mock_knn_model._model.kneighbors = MagicMock(
+        return_value = (None, array([[1, 2, 3, 4, 5]])) 
+    ) 
+    mock_knn_model\
+        ._query_recommended_items = MagicMock(
+            return_value = [101, 102, 103]
+        )
+    
+    recommendations = mock_knn_model.recommend(
+        customer_id= 1,
+        order_items=[{"item_id": 26, "item_tags": [30, 19, 2]}, {"item_id": 18, "item_tags": [43, 9]}],
+        num_recommendations=3
+    )
+    
+    mock_knn_model._query_customer_items_matrix.assert_called_once_with(1)
+    mock_knn_model._model.kneighbors.assert_called_once()
+    mock_knn_model \
+        ._query_recommended_items \
+        .assert_called_once_with(
+            [2,3,4,5], [26, 18], 3
+        )
+    assert recommendations == [101, 102, 103]
+
+
+def test_recommend_no_order_items(mock_knn_model: KNNModel):
+    mock_knn_model\
+        ._query_customer_items_matrix = MagicMock(
+            return_value = array([[1, 0, 1, 0, 1]])
+        )
+    mock_knn_model._model.kneighbors = MagicMock(
+        return_value = (None, array([[1, 2, 3, 4, 5]])) 
+    )
+    
+    recommendations = mock_knn_model.recommend(
+        customer_id= 1,
+        order_items=[],
+        num_recommendations=3
+    )
+    assert recommendations == []
+
 
 def test_invalid_conf_path_raises_error():
     """Test that an invalid configuration path raises a ValueError.
