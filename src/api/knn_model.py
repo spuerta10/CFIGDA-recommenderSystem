@@ -80,6 +80,9 @@ class KNNModel:
         Returns:
             list[int]: A list of item IDs recommended for the target customer.
         """
+        if not similar_customers or not item_ids:
+            return []
+        
         recommended_items_df: DataFrame = self._bq_client.query(
             MOST_SOLD_PRODUCTS_FOR_CUSTOMER_QUERY.format(
                 tuple(similar_customers), tuple(item_ids), num_recommendations
