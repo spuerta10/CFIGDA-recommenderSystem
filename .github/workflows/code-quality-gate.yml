@@ -14,6 +14,7 @@ env:
 
 jobs:
   code-quality-analysis:
+    name: Code quality analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -38,6 +39,7 @@ jobs:
         run: tox -p
 
     sonarqube-analysis:
+      name: Sonarqube code anlysis
       runs-on: ubuntu-latest
       steps:
         - name: Checkout repo
