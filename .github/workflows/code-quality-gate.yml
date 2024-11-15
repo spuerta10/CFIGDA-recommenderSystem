@@ -52,6 +52,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
       
       - name: Install SonarScanner
         run: |
