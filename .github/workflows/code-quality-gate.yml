@@ -41,6 +41,13 @@ jobs:
       - name: Run Tox
         run: tox -p
 
+      - name: Upload generated coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.xml
+
+
   sonarqube-analysis:
     name: SonarQube Code Analysis
     needs: code-quality-analysis
@@ -61,6 +68,11 @@ jobs:
           unzip sonar-scanner-cli-5.0.1.3006-linux.zip
           sudo mv sonar-scanner-5.0.1.3006-linux /opt/sonar-scanner
           sudo ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/bin/sonar-scanner
+      
+      - name: Get uploaded coverage report
+        uses: actions/download.artifact@v3
+        with:
+          name: coverage-report
       
       - name: Run SonarScanner
         run: |
