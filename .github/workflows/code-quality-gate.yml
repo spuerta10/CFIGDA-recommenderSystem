@@ -43,6 +43,7 @@ jobs:
 
   sonarqube-analysis:
     name: SonarQube Code Analysis
+    needs: code-quality-analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
