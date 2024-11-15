@@ -1,4 +1,3 @@
-from unittest.mock import MagicMock
 from api.flask_app_builder import FlaskAppBuilder
 
 import pytest

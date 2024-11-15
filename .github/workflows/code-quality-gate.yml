@@ -10,6 +10,7 @@ on:
 
 env:
   PYTHON_VERSION: 3.11
+  JAVA_VERSION: 11 # SonarQube requires Java
 
 jobs:
   code-quality-analysis:
@@ -35,3 +36,33 @@ jobs:
       
       - name: Run tox
         run: tox -p
+
+    sonarqube-analysis:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repo
+          uses: actions/checkout@v3
+        
+        - name: Install JDK 
+          uses: actions/setup-java@v3
+          with:
+            java-version: ${{ env.PYTHON_VERSION }}
+        
+        - name: Install SonarScanner
+          run: |
+            wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+            unzip sonar-scanner-cli-5.0.1.3006-linux.zip
+            sudo mv sonar-scanner-5.0.1.3006-linux /opt/sonar-scanner
+            sudo ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/bin/sonar-scanner
+        
+        - name: Run SonarScanner
+          run: |
+            sonar-scanner \
+              -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+              -Dsonar.sources=. \
+              -Dsonar.host.url=$SONAR_HOST_URL \
+              -Dsonar.token=$SONAR_TOKEN
+          env:
+            SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+            SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
