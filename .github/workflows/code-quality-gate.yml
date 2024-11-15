@@ -81,3 +81,23 @@ jobs:
             -Dsonar.sources=. \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN
+
+  sonarqube-quality-gate-check:
+    name: Check SonarQube Quality Gate
+    needs: sonarqube-analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install jq command
+        run: |
+          sudo apt install jq -y
+      
+      - name: Fetch SonarQube Quality Gate
+        run: |
+          result=$(curl -u $SONAR_TOKEN: $SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$SONAR_PROJECT_KEY)
+          status=$(echo $result | jq -r '.projectStatus.status')
+          if [ "$status" != "OK" ]; then
+            echo "Quality Gate failed! Status: $status"
+            exit 1
+          else
+            echo "Quality Gate passed!"
+          fi
